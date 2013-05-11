@@ -41,6 +41,9 @@ public class GameComponent extends Canvas implements Runnable {
 	
 	//-----------------------
 	public TestWorld world;
+	public TestEntity player;
+	
+	//-----------------------
 	
 	public GameComponent() {
 		scale = 3;
@@ -61,8 +64,17 @@ public class GameComponent extends Canvas implements Runnable {
 		
 		//-------------------
 		//World loading
-		this.world.addEntity(new TestEntity(keys));
-		
+		initializeWorld();
+	}
+	
+	public void createWorld() {
+		world = new TestWorld(30, 20);
+		//TODO: Create a method of loading the world.
+	}
+	
+	public void initializeWorld() {
+		this.player = new TestEntity(keys);
+		this.world.addEntity(player);
 	}
 	
 	public void start() {
@@ -144,7 +156,7 @@ public class GameComponent extends Canvas implements Runnable {
 			if (System.currentTimeMillis() - lastTimer > 1000) {
 				lastTimer += 1000;
 				fps = frames;
-				System.out.println("FPS: " + Integer.toString(fps));
+				//System.out.println("FPS: " + Integer.toString(fps));
 				frames = 0;
 			}
 		}
@@ -160,15 +172,18 @@ public class GameComponent extends Canvas implements Runnable {
 	public synchronized void render(Graphics g) {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		g.translate((this.getWidth() - GAME_WIDTH * scale) / 2, (this.getHeight() - GAME_HEIGHT * scale) / 2);
+		g.translate((((this.getWidth() - (GAME_WIDTH) * scale)) / 2) - this.player.xPosition * scale, ((this.getHeight() - (GAME_HEIGHT) * scale) / 2) - this.player.yPosition * scale);
 		g.clipRect(0, 0, GAME_WIDTH * scale, GAME_HEIGHT * scale);
-		
 		screen.clear(0xffffff);
-		world.render(screen, 0, 0);
+		
+		if (world != null) {
+			int xScroll = (player.xPosition);
+			int yScroll = (player.yPosition);
+			world.render(screen, xScroll, yScroll);
+		}
 		
 		BufferedImage image = createCompatibleBufferedImage(screen.getBufferedImage());
 		g.drawImage(image, 0, 0, GAME_WIDTH * scale, GAME_HEIGHT * scale, null);
-		
 	}
 	
 	public WindowListener getWindowListener() {
@@ -212,11 +227,6 @@ public class GameComponent extends Canvas implements Runnable {
 		graphics.dispose();
 		return newImage;
 	}
-	
-	public void createWorld() {
-		world = new TestWorld();
-	}
-	
 	//---------------------------------
 	//Other methods
 }

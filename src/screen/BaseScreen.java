@@ -29,6 +29,10 @@ public class BaseScreen extends BaseBitmap {
 		Arrays.fill(pixels, color);
 	}
 	
+	public void blit(BaseBitmap bitmap, int x, int y) {
+		this.blit(bitmap, x, y, bitmap.width, bitmap.height);
+	}
+	
 	public void blit(BaseBitmap bitmap, int x, int y, int w, int h) {
 		//TODO: May need to change parameter types into abstracts/interfaces.
 		if (w == -1)

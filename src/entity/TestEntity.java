@@ -1,6 +1,7 @@
 package entity;
 
 import level.BaseWorld;
+import level.tile.Tile;
 import main.Keys;
 import resources.Art;
 import screen.BaseScreen;
@@ -8,10 +9,12 @@ import screen.BaseScreen;
 public class TestEntity extends Entity {
 	
 	public Keys keys;
+	public int xPosition;
+	public int yPosition;
 	int facing = 0;
 	int turning = 0;
-	int xPosition;
-	int yPosition;
+	
+	int testValue = 0;
 	
 	int xAccel;
 	int yAccel;
@@ -22,8 +25,12 @@ public class TestEntity extends Entity {
 		this.keys = keys;
 	}
 	
+	public void setCenter(BaseScreen screen) {
+	}
+	
 	@Override
 	public void initialize(BaseWorld world) {
+		
 	}
 	
 	@Override
@@ -67,7 +74,9 @@ public class TestEntity extends Entity {
 	
 	@Override
 	public void render(BaseScreen screen) {
-		screen.blit(Art.player[turning][0], xPosition, yPosition, 16, 16);
+		//Blits the entity onto the screen, being offsetted to the left, which fits snugly in the world grids.
+		screen.blit(Art.player[turning][0], (screen.getWidth() - Tile.WIDTH * 2) / 2 + xPosition, (screen.getHeight() - Tile.HEIGHT) / 2 + yPosition, 16, 16);
+		
 	}
 	
 	//-----------------------------------
